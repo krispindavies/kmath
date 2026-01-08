@@ -35,10 +35,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace kmath
 {
 
+//! A relative time.
 struct Time
 {
-  std::size_t sec_{0};
-  std::size_t nsec_{0};
+  void set(const int64_t& sec, const int32_t& nsec);
+  const int64_t& sec() const;
+  const int32_t& nsec() const;
+  double toDouble() const;
+
+protected:
+  void rectify();
+  int64_t sec_{0};
+  int32_t nsec_{0};
 };
 
 std::string to_string(const Time& time);

@@ -35,27 +35,80 @@ TEST(KmathTimeTest, time_test)
 {
   // Check default construction.
   kmath::Time time;
-  EXPECT_EQ(0, time.sec_);
-  EXPECT_EQ(0, time.nsec_);
+  EXPECT_EQ(0, time.sec());
+  EXPECT_EQ(0, time.nsec());
+  EXPECT_EQ(0.0, time.toDouble());
   EXPECT_EQ("0", to_string(time));
 
-  // Check time with only nanoseconds.
-  time = kmath::Time{ 0, 10 };
-  EXPECT_EQ(0, time.sec_);
-  EXPECT_EQ(10, time.nsec_);
+  // Check time with positive nanoseconds.
+  time.set(0, 10);
+  EXPECT_EQ(0, time.sec());
+  EXPECT_EQ(10, time.nsec());
+  EXPECT_EQ(0.00000001, time.toDouble());
   EXPECT_EQ("0.00000001", to_string(time));
 
-  // Check time with only seconds.
-  time = kmath::Time{ 10, 0 };
-  EXPECT_EQ(10, time.sec_);
-  EXPECT_EQ(0, time.nsec_);
+  // Check time with positive seconds.
+  time.set(10, 0);
+  EXPECT_EQ(10, time.sec());
+  EXPECT_EQ(0, time.nsec());
+  EXPECT_EQ(10.0, time.toDouble());
   EXPECT_EQ("10", to_string(time));
 
-  // Check time with both.
-  time = kmath::Time{ 10, 10 };
-  EXPECT_EQ(10, time.sec_);
-  EXPECT_EQ(10, time.nsec_);
+  // Check time with both positive.
+  time.set(10, 10);
+  EXPECT_EQ(10, time.sec());
+  EXPECT_EQ(10, time.nsec());
+  EXPECT_EQ(10.00000001, time.toDouble());
   EXPECT_EQ("10.00000001", to_string(time));
+
+  // Check time with positive seconds and overly positive nanoseconds.
+  time.set(10, 2000000010);
+  EXPECT_EQ(12, time.sec());
+  EXPECT_EQ(10, time.nsec());
+  EXPECT_EQ(12.00000001, time.toDouble());
+  EXPECT_EQ("12.00000001", to_string(time));
+
+  // Check time with positive seconds and negative nanoseconds.
+  time.set(10, -10);
+  EXPECT_EQ(9, time.sec());
+  EXPECT_EQ(999999990, time.nsec());
+  EXPECT_EQ(9.99999999, time.toDouble());
+  EXPECT_EQ("9.99999999", to_string(time));
+
+  // Check time with negative nanoseconds.
+  time.set(0, -10);
+  EXPECT_EQ(0, time.sec());
+  EXPECT_EQ(-10, time.nsec());
+  EXPECT_EQ(-0.00000001, time.toDouble());
+  EXPECT_EQ("-0.00000001", to_string(time));
+
+  // Check time with negative seconds.
+  time.set(-10, 0);
+  EXPECT_EQ(-10, time.sec());
+  EXPECT_EQ(0, time.nsec());
+  EXPECT_EQ(-10.0, time.toDouble());
+  EXPECT_EQ("-10", to_string(time));
+
+  // Check time with both negative.
+  time.set(-10, -10);
+  EXPECT_EQ(-10, time.sec());
+  EXPECT_EQ(-10, time.nsec());
+  EXPECT_EQ(-10.00000001, time.toDouble());
+  EXPECT_EQ("-10.00000001", to_string(time));
+
+  // Check time with negative seconds and positive nanoseconds.
+  time.set(-10, 10);
+  EXPECT_EQ(-9, time.sec());
+  EXPECT_EQ(-999999990, time.nsec());
+  EXPECT_EQ(-9.99999999, time.toDouble());
+  EXPECT_EQ("-9.99999999", to_string(time));
+
+  // Check time with negative seconds and overly negative nanoseconds.
+  time.set(-10, -2000000010);
+  EXPECT_EQ(-12, time.sec());
+  EXPECT_EQ(-10, time.nsec());
+  EXPECT_EQ(-12.00000001, time.toDouble());
+  EXPECT_EQ("-12.00000001", to_string(time));
 }
 
 int main(int argc, char** argv)
