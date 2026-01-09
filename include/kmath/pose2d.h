@@ -39,28 +39,60 @@ namespace kmath
 class Pose2D
 {
 public:
+  //! Default constructor.
   Pose2D() = default;
+
+  //! Copy constructor.
   Pose2D(const Pose2D& pose) = default;
+
+  //! Move constructor.
   Pose2D(Pose2D&& pose) = default;
+
+  //! Copy assignment operator.
   Pose2D& operator=(const Pose2D& pose) = default;
+
+  //! Move assignment operator.
   Pose2D& operator=(Pose2D&& pose) = default;
+
+  //! Valued constructor.
   Pose2D(const double x, const double y, const double yaw);
 
+  //! Access the x-axis pose value.
   double& x();
+
+  //! Const access the x-axis pose value.
   const double& x() const;
+
+  //! Access the y-axis pose value.
   double& y();
+
+  //! Const access the y-axis pose value.
   const double& y() const;
+
+  //! Access the yaw-rotation pose value.
   double& yaw();
+
+  //! Const access the yaw-rotation pose value.
   const double& yaw() const;
+
+  //! Magnitude of the x and y components of the pose.
   double magnitudeXY();
+
+  //! Magnitude of the x, y, and yaw components of the pose.
   double magnitudeSE2();
 
 protected:
+  //! Pose's x-axis value.
   double x_{0.0};
+
+  //! Pose's y-axis value.
   double y_{0.0};
+
+  //! Pose's yaw-rotation value.
   double yaw_{0.0};
 };
 
+//! Convert a pose into a string.
 std::string to_string(const Pose2D& pose);
 
 }  // namespace kmath
