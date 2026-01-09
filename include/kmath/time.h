@@ -39,6 +39,13 @@ namespace kmath
 class Time
 {
 public:
+  Time() = default;
+  Time(const Time& time) = default;
+  Time(Time&& time) = default;
+  Time& operator=(const Time& time) = default;
+  Time& operator=(Time&& time) = default;
+  Time(const int64_t sec, const int32_t nsec);
+
   void set(const int64_t& sec, const int32_t& nsec);
   const int64_t& sec() const;
   const int32_t& nsec() const;

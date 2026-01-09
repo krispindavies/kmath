@@ -36,6 +36,11 @@ namespace kmath
 
 constexpr int32_t one_second_in_nanoseconds = 1000000000;
 
+Time::Time(const int64_t sec, const int32_t nsec) : sec_(sec), nsec_(nsec)
+{
+  rectify();
+}
+
 void Time::set(const int64_t& sec, const int32_t& nsec)
 {
   sec_ = sec;
