@@ -35,21 +35,32 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace kmath
 {
 
-//! A relative time.
-class Time
+//! Pose in a 2-dimensional world.
+class Pose2D
 {
 public:
-  void set(const int64_t& sec, const int32_t& nsec);
-  const int64_t& sec() const;
-  const int32_t& nsec() const;
-  double toDouble() const;
+  Pose2D() = default;
+  Pose2D(const Pose2D& pose) = default;
+  Pose2D(Pose2D&& pose) = default;
+  Pose2D& operator=(const Pose2D& pose) = default;
+  Pose2D& operator=(Pose2D&& pose) = default;
+  Pose2D(const double x, const double y, const double yaw);
+
+  double& x();
+  const double& x() const;
+  double& y();
+  const double& y() const;
+  double& yaw();
+  const double& yaw() const;
+  double magnitudeXY();
+  double magnitudeSE2();
 
 protected:
-  void rectify();
-  int64_t sec_{0};
-  int32_t nsec_{0};
+  double x_{0.0};
+  double y_{0.0};
+  double yaw_{0.0};
 };
 
-std::string to_string(const Time& time);
+std::string to_string(const Pose2D& pose);
 
 }  // namespace kmath

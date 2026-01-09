@@ -12,6 +12,7 @@ include_directories(include)
 #########
 
 add_library(kmath
+  src/pose2d.cpp
   src/time.cpp
 )
 
@@ -40,3 +41,7 @@ install(
 add_executable(time_test test/time_test.cpp)
 target_link_libraries(time_test kmath gtest)
 add_test(time_test_run time_test)
+
+add_executable(pose2d_test test/pose2d_test.cpp)
+target_link_libraries(pose2d_test kmath gtest)
+add_test(pose2d_test_run pose2d_test)

@@ -27,81 +27,59 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "kmath/time.h"
+#include "kmath/pose2d.h"
 
+#include <cmath>
 #include <format>
 
 namespace kmath
 {
 
-constexpr int32_t one_second_in_nanoseconds = 1000000000;
+Pose2D::Pose2D(const double x, const double y, const double yaw) : x_(x), y_(y), yaw_(yaw) {}
 
-void Time::set(const int64_t& sec, const int32_t& nsec)
+double& Pose2D::x()
 {
-  sec_ = sec;
-  nsec_ = nsec;
-  rectify();
+  return x_;
 }
 
-double Time::toDouble() const
+const double& Pose2D::x() const
 {
-  return sec_ + nsec_ / 1.0e9;
+  return x_;
 }
 
-const int64_t& Time::sec() const
+double& Pose2D::y()
 {
-  return sec_;
+  return y_;
 }
 
-const int32_t& Time::nsec() const
+const double& Pose2D::y() const
 {
-  return nsec_;
+  return y_;
 }
 
-void Time::rectify()
+double& Pose2D::yaw()
 {
-  if (sec_ > 0 && nsec_ < 0)
-  {
-    const auto x = std::abs(nsec_ + 1) / one_second_in_nanoseconds + 1;
-    sec_ -= x;
-    nsec_ += x * one_second_in_nanoseconds;
-  }
-  else if (sec_ > 0 && nsec_ > one_second_in_nanoseconds)
-  {
-    sec_ += nsec_ / one_second_in_nanoseconds;
-    nsec_ = nsec_ % one_second_in_nanoseconds;
-  }
-  else if (sec_ < 0 && nsec_ > 0)
-  {
-    const auto x = std::abs((nsec_ - 1) / one_second_in_nanoseconds) + 1;
-    sec_ += x;
-    nsec_ -= x * one_second_in_nanoseconds;
-  }
-  else if (sec_ < 0 && nsec_ < one_second_in_nanoseconds)
-  {
-    sec_ += nsec_ / one_second_in_nanoseconds;
-    nsec_ = nsec_ % one_second_in_nanoseconds;
-  }
+  return yaw_;
 }
 
-std::string to_string(const Time& time)
+const double& Pose2D::yaw() const
 {
-  std::string result;
-  if (time.sec() < 0 || (time.sec() == 0 && time.nsec() < 0))
-  {
-    result += '-';
-  }
-  result += std::to_string(std::abs(time.sec()));
-  if (time.nsec() != 0)
-  {
-    result += "." + std::format("{:09}", std::abs(time.nsec()));
-    const std::size_t last_char = result.find_last_not_of('0');
-    if (last_char != std::string::npos)
-    {
-      result.erase(last_char + 1);
-    }
-  }
-  return result;
+  return yaw_;
+}
+
+double Pose2D::magnitudeXY()
+{
+  return std::sqrt(std::pow(x_, 2) + std::pow(y_, 2));
+}
+
+double Pose2D::magnitudeSE2()
+{
+  return std::sqrt(std::pow(x_, 2) + std::pow(y_, 2) + std::pow(yaw_, 2));
+}
+
+std::string to_string(const Pose2D& pose)
+{
+  return std::to_string(pose.x()) + ", " + std::to_string(pose.y()) + ", " + std::to_string(pose.yaw());
 }
 
 }  // namespace kmath
